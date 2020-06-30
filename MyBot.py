@@ -65,9 +65,9 @@ while True:
                     continue
                 else:
                     if not planet.is_owned() or planet.owner.id != Map.my_id:
-                     
-                        xy = planet.closest_point_to(arrmy,3)
-
+                        xy = arrmy.closest_point_to(planet)
+                        if AttackOwnerPlanet : 
+                            xy = planet.closest_point_to(arrmy)
                         navigate_command = arrmy.navigate(
                             xy,
                             Map,
