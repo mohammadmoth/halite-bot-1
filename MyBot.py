@@ -2,7 +2,7 @@ import hlt
 import logging
 import random
 from collections import OrderedDict
-game = hlt.Game("Faster -V3")
+game = hlt.Game("Faster -V4")
 logging.info("Starting my Faster bot!")
 ignore_planttacksame = False
 AttackOwnerPlanet = False
