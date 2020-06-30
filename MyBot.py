@@ -6,7 +6,9 @@ game = hlt.Game("Faster -V3")
 logging.info("Starting my Faster bot!")
 ignore_planttacksame = False
 AttackOwnerPlanet = False
+turn = 0
 while True:
+    turn = turn + 1
     Map = game.update_map()
     commands = []
     Planet_has_been_attacked = []
@@ -47,7 +49,7 @@ while True:
        # logging.info(targetplanet)
        # logging.info(targetarrmy)
 
-        if len(targetplanet) == 0:
+        if len(targetplanet) == 0 and turn >100:
             AttackOwnerPlanet = True
             ignore_planttacksame = True
         
