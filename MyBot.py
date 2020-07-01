@@ -9,6 +9,7 @@ AttackOwnerPlanet = False
 turn = 0
 while True:
     turn = turn + 1
+    logging.info("turn :" + str(turn))
     Map = game.update_map()
     commands = []
     Planet_has_been_attacked = []
@@ -34,14 +35,13 @@ while True:
         targetplanet = []
         targetarrmy = []
 
-        if arrmy.docking_status == arrmy.DockingStatus.DOCKING and arrmy.docking_status == arrmy.DockingStatus.UNDOCKING:
+        if arrmy.docking_status != arrmy.DockingStatus.UNDOCKED:
             continue
 
         entities_by_distance_all = Map.nearby_entities_by_distance(arrmy)
 
-       
-        entities_by_distance_all = sorted(entities_by_distance_all.items(), key=lambda entities_by_distance_allX: entities_by_distance_allX[0], reverse=False)
-
+        entities_by_distance_all = sorted(entities_by_distance_all.items(
+        ), key=lambda entities_by_distance_allX: entities_by_distance_allX[0], reverse=False)
 
         for target in entities_by_distance_all:
             if isinstance(target[1][0], hlt.entity.Planet) and (not target[1][0].is_owned() or AttackOwnerPlanet):
@@ -53,17 +53,23 @@ while True:
        # logging.info(targetplanet)
        # logging.info(targetarrmy)
 
-        if len(targetplanet) == 0:
+      #  if len(targetplanet) or turn > 10 == 0:
             AttackOwnerPlanet = True
             ignore_planttacksame = True
 
         for planet in targetplanet:
-            if arrmy.can_dock(planet) and (not planet.is_owned() or planet.owner.id != Map.my_id) and not planet in listofplantdock:
+            if arrmy.can_dock(planet) and (not planet.is_owned() or planet.owner.id != Map.my_id) and not planet in listofplantdock and turn < 150:
                 if AttackOwnerPlanet:
                     listofplantdock.append(planet)
-
+                logging.info("try do dock1 : " + str(arrmy.id) +
+                             "id plan : " + str(planet.id))
                 commands.append(arrmy.dock(planet))
+                break
 
+            elif (arrmy.can_dock(planet) and planet.is_owned() and planet.owner.id == Map.my_id and not planet.is_full()) and turn < 150:
+                commands.append(arrmy.dock(planet))
+                logging.info("try do dock : " + str(arrmy.id) +
+                             "id plan : " + str(planet.id))
                 break
             else:
                 if planet in Planet_has_been_attacked and not ignore_planttacksame:
@@ -71,14 +77,19 @@ while True:
                     continue
                 else:
                     if not planet.is_owned() or planet.owner.id != Map.my_id:
-                        xy = arrmy.closest_point_to(planet)
-                        if AttackOwnerPlanet and turn > 100:
-                            xy = planet.closest_point_to(arrmy)
+                        if planet.is_owned():
+                            xy = arrmy.closest_point_to(
+                                planet.all_docked_ships()[0])
+                        else:
+                            xy = arrmy.closest_point_to(planet)
+
                         navigate_command = arrmy.navigate(
                             xy,
                             Map,
                             speed=int(7),
                             ignore_ships=False)
+                        logging.info("navigate: " + str(arrmy.id) +
+                                     " to :" + str(planet.id))
                     else:
                         continue
                     if navigate_command:
