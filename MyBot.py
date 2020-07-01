@@ -2,7 +2,7 @@ import hlt
 import logging
 import random
 from collections import OrderedDict
-game = hlt.Game("Faster -V4")
+game = hlt.Game("Faster -V5")
 logging.info("Starting my Faster bot!")
 ignore_planttacksame = False
 AttackOwnerPlanet = False
@@ -61,14 +61,14 @@ while True:
             if arrmy.can_dock(planet) and (not planet.is_owned() or planet.owner.id != Map.my_id) and not planet in listofplantdock and turn < 150:
                 if AttackOwnerPlanet:
                     listofplantdock.append(planet)
-                #logging.info("try do dock1 : " + str(arrmy.id) +
+                logging.info("try do dock1 : " + str(arrmy.id) +
                              "id plan : " + str(planet.id))
                 commands.append(arrmy.dock(planet))
                 break
 
             elif (arrmy.can_dock(planet) and planet.is_owned() and planet.owner.id == Map.my_id and not planet.is_full()) and turn < 150:
                 commands.append(arrmy.dock(planet))
-                #logging.info("try do dock : " + str(arrmy.id) +
+                logging.info("try do dock : " + str(arrmy.id) +
                              "id plan : " + str(planet.id))
                 break
             else:
@@ -88,7 +88,7 @@ while True:
                             Map,
                             speed=int(7),
                             ignore_ships=False)
-                        #logging.info("navigate: " + str(arrmy.id) +
+                        logging.info("navigate: " + str(arrmy.id) +
                                      " to :" + str(planet.id))
                     else:
                         continue
