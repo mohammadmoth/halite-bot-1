@@ -62,14 +62,14 @@ while True:
                 if AttackOwnerPlanet:
                     listofplantdock.append(planet)
                 #logging.info("try do dock1 : " + str(arrmy.id) +
-                             "id plan : " + str(planet.id))
+                #             "id plan : " + str(planet.id))
                 commands.append(arrmy.dock(planet))
                 break
 
             elif (arrmy.can_dock(planet) and planet.is_owned() and planet.owner.id == Map.my_id and not planet.is_full()) and turn < 150:
                 commands.append(arrmy.dock(planet))
                 #logging.info("try do dock : " + str(arrmy.id) +
-                             "id plan : " + str(planet.id))
+                #            "id plan : " + str(planet.id))
                 break
             else:
                 if planet in Planet_has_been_attacked and not ignore_planttacksame:
@@ -89,7 +89,7 @@ while True:
                             speed=int(7),
                             ignore_ships=False)
                         #logging.info("navigate: " + str(arrmy.id) +
-                                     " to :" + str(planet.id))
+                        #             " to :" + str(planet.id))
                     else:
                         continue
                     if navigate_command:
