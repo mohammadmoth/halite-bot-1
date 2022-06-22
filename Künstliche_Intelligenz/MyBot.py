@@ -5,13 +5,12 @@ from collections import OrderedDict
 StartGame = hlt.Game("ZIZO")
 logging.info("Starting my Faster bot!")
 
-AOP = True  # Angriff auf besessene Planeten
+AOP = False  # Angriff auf besessene Planeten
 Counter = 0
 
-
-StartMod1 = 150  # Starte den Angriff nach dieser Runde
+Angriff_starten = 120  # Starte den Angriff nach dieser Runde
+StartMod1 = 150
 StartMod2 = 10
-
 
 def StatusCanBeUsed(Ship):
     if Ship.docking_status != Ship.DockingStatus.UNDOCKED:
@@ -32,6 +31,7 @@ def SetMode(PlanteAT , AOP  ):
         return True
     elif AOP and Counter < StartMod2 and Counter > StartMod1:
         return False
+   
 
 
 while True:
@@ -58,7 +58,7 @@ while True:
                 PlanteAT.append(near[1][0])
 
         AOP =  SetMode(PlanteAT , AOP)
- 
+
         for planet in PlanteAT:
             if Ship.can_dock(planet) and (not planet.is_owned() or planet.owner.id != Map.my_id) and not planet in listofplantdock:
                 if AOP:
@@ -79,7 +79,8 @@ while True:
                                 planet.all_docked_ships()[0])
                         else:
                             xy = Ship.closest_point_to(planet)
-                            
+                            xy.x += random.randint(0, 10)*0.05
+                            xy.y += random.randint(0, 10)*0.05
                         navigate_command = Ship.navigate(
                             xy,
                             Map,
